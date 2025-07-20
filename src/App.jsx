@@ -33,7 +33,7 @@ function App() {
         <nav className="hidden md:flex flex-1 justify-center space-x-8 text-gray-700 font-medium">
           <a href="#home">Home</a>
           <a href="#projects">Projects</a>
-          <a href="#Experience">Experience</a>
+          {/* <a href="#Experience">Experience</a> */}
           <a href="#skills">Skills</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
@@ -99,9 +99,9 @@ function App() {
       </section>
 
       {/* Experience Section */}
-      <section id="Experience" className="bg-white py-12 px-6 md:px-20">
+      {/* <section id="Experience" className="bg-white py-12 px-6 md:px-20">
         <Experience />
-      </section>
+      </section> */}
 
       {/* Skills Section */}
       <section id="skills" className="bg-gray-100 py-12 px-6 md:px-20">
