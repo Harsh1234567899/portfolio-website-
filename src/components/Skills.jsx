@@ -1,4 +1,3 @@
-// src/Skills.jsx
 import React from 'react';
 
 const skills = [

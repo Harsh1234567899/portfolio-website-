@@ -20,9 +20,4 @@ export const personalInfo = {
       image: "/game.jpeg",
     },
   ],
-  whatsapp: "",
-  socialLinks: {
-    linkedin: "https://www.linkedin.com/in/pankhaniya-harsh-21b234294/",
-    github: "https://github.com/Harsh1234567899"
-  },
 };

@@ -4,7 +4,7 @@ import Contact from './components/Contact';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
 import About from './components/About';
-import Projects from './components/Projects'; // Adjust path as needed
+import Projects from './components/Projects';
 
 const downloadResume = () => {
   fetch('/Harsh_Pankhaniya.pdf')

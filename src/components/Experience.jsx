@@ -1,4 +1,3 @@
-// src/Experience.jsx
 import React from 'react';
 
 const experiences = [

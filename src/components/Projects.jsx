@@ -1,6 +1,5 @@
-// Projects.jsx
 import React, { useState } from "react";
-import { personalInfo } from "../data"; // adjust path if needed
+import { personalInfo } from "../data";
 
 const Projects = () => {
     const [expanded, setExpanded] = useState(null);
