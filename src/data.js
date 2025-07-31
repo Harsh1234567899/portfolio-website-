@@ -15,6 +15,11 @@ export const personalInfo = {
       image: "/calculator.png",
     },
     {
+      title: "Movie Tickit Booking System",
+      desc: "A Movie Ticket Booking Sytem for Collage project with admin panel with <strong>React.js & Node.js & javascript",
+      image: "/MovieTicketBooking.png",
+    },
+    {
       title: "Static Website",
       desc: "A GAME information Website. A Collage Project Website using <strong>HTML & CSS & javascript",
       image: "/game.jpeg",
