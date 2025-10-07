@@ -13,11 +13,13 @@ const Projects = () => {
                         key={index}
                         className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
                     >
-                        <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-48 object-cover rounded-t-xl"
-                        />
+                        <a href={project.link} rel="noopener noreferrer">
+                            <img
+                                src={project.image}
+                                alt={project.title}
+                                className="w-full h-48 object-cover rounded-t-xl"
+                            />
+                        </a>
                         <div className="p-4 flex flex-col flex-grow">
                             <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                             <div

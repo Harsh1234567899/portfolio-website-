@@ -18,6 +18,7 @@ export const personalInfo = {
       title: "Movie Tickit Booking System",
       desc: "A Movie Ticket Booking Sytem for Collage project with admin panel with <strong>React.js & Node.js & javascript",
       image: "/MovieTicketBooking.png",
+      link: "https://movie-ticket-booking-gamma-six.vercel.app/",
     },
     {
       title: "Static Website",
