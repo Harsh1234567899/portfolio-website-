@@ -26,11 +26,11 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="font-sans text-gray-800">
+    <div className="font-sans text-white bg-slate-900">
       {/* Navbar */}
-      <header className="bg-white shadow-md p-4 flex items-center justify-between md:px-12">
-        <h1 className="text-xl font-bold text-blue-700">{personalInfo.name}</h1>
-        <nav className="hidden md:flex flex-1 justify-center space-x-8 text-gray-700 font-medium">
+      <header className=" bg-slate-900 shadow-md p-4 flex items-center justify-between md:px-12  ">
+        <h1 className="text-xl font-bold text-blue-500">{personalInfo.name}</h1>
+        <nav className="hidden md:flex flex-1 justify-center space-x-8 text-white font-medium">
           <a href="#home">Home</a>
           <a href="#projects">Projects</a>
           {/* <a href="#Experience">Experience</a> */}
@@ -72,13 +72,13 @@ function App() {
       )}
 
       {/* Home Section */}
-      <section id="home" className="bg-white px-6 md:px-20 py-20 flex flex-col-reverse md:flex-row items-center justify-between">
+      <section id="home" className=" bg-slate-900 px-6 md:px-20 py-20 flex flex-col-reverse md:flex-row items-center justify-between">
         <div className="max-w-xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
-            Hi, I'm <span className="text-gray-700">{personalInfo.name}!</span>
+            Hi, I'm <span className="text-white">{personalInfo.name}!</span>
           </h2>
           <h1 className="text-4xl md:text-5xl font-extrabold text-purple-700 mb-4">Web Devloper</h1>
-          <p className="text-gray-600 mb-6">{personalInfo.about}</p>
+          <p className="text-white mb-6">{personalInfo.about}</p>
           <div className="flex flex-wrap gap-4">
             <a href="#projects" className="px-5 py-2 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition">
               PROJECTS
@@ -104,7 +104,7 @@ function App() {
       </section> */}
 
       {/* Skills Section */}
-      <section id="skills" className="bg-gray-100 py-12 px-6 md:px-20">
+      <section id="skills" className=" py-12 px-6 md:px-20">
         <Skills />
       </section>
 

@@ -13,7 +13,7 @@ const skills = [
 
 const Skills = () => {
   return (
-    <div className="p-8 bg-white" id="skills">
+    <div className="p-8 " id="skills">
       <h2 className="text-3xl font-bold text-center mb-2">My Skills</h2>  
       <p className="text-center text-gray-500 mb-8">
         My technical skill set and current proficiency levels.
@@ -27,7 +27,7 @@ const Skills = () => {
           return (
             <div
               key={index}
-              className="bg-white shadow-md rounded-2xl p-4 flex flex-col items-center w-40 
+              className=" bg-slate-800 shadow-md rounded-2xl p-4 flex flex-col items-center w-40 
                          transition-transform duration-300 hover:scale-110 hover:shadow-lg"
             >
               <div className="relative w-20 h-20 mb-3">

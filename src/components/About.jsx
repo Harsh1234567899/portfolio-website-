@@ -5,10 +5,10 @@ const About = ({ downloadResume }) => {
   return (
     <section
       id="about"
-      className="bg-white px-6 md:px-20 py-12 flex flex-col-reverse md:flex-row items-center justify-between"
+      className=" bg-slate-900 px-6 md:px-20 py-12 flex flex-col-reverse md:flex-row items-center justify-between text-white"
     >
       {/* Left Side - Text Content */}
-      <div className="max-w-2xl text-sm text-gray-700 leading-relaxed">
+      <div className="max-w-2xl text-sm leading-relaxed">
         <h2 className="text-3xl font-semibold mb-4">About Me</h2>
         <p>
           I'm <strong>Harsh Pankhaniya</strong>, a passionate Full Stack Developer with a Bachelor’s degree in Information Technology from <strong>Marwadi University</strong> (2021–2024).

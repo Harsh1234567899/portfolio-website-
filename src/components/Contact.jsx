@@ -7,16 +7,16 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="w-full flex flex-col md:flex-row justify-between items-start gap-10 p-6 md:p-12 bg-gray-100 rounded-2xl shadow-md"
+      className="w-full flex flex-col md:flex-row justify-between items-start gap-10 p-6 md:p-12  bg-slate-900 rounded-2xl shadow-md"
     >
       {/* Left Info Section */}
       <div className="w-full md:w-1/2 space-y-6">
-        <h2 className="text-3xl font-bold text-gray-900">Let’s Connect</h2>
-        <p className="text-gray-600">
+        <h2 className="text-3xl font-bold ">Let’s Connect</h2>
+        <p >
           Reach out for collaborations or just a friendly hello! 👋
         </p>
 
-        <div className="space-y-1 text-base text-gray-700">
+        <div className="space-y-1 text-base">
           <p><strong>Email:</strong> pankhaniyaharsh222@gmail.com</p>
           <p><strong>Phone:</strong> +91 7862807185</p>
           <p><strong>Location:</strong> Gujarat, India</p>
@@ -36,7 +36,7 @@ const Contact = () => {
             href="https://github.com/Harsh1234567899"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:scale-110 transition-transform text-gray-900"
+            className="hover:scale-110 transition-transform "
           >
             <FaGithub />
           </a>
