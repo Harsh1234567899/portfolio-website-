@@ -6,27 +6,110 @@ import { slugify } from "../docs/slugify.js";
 import ScrollToHash from './ScrollToHash.jsx'
 
 export default function DocsLayout() {
-  // ✅ start closed — avoids mismatch bugs
   const [openSection, setOpenSection] = useState(null);
   const [query, setQuery] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const results = searchDocs(query);
 
-  return (
-    <div className="min-h-screen bg-slate-900 text-white flex">
-      <aside className="w-64 border-r border-gray-700 p-5 sticky top-0 h-screen overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4">Docs</h2>
+  const closeAll = () => {
+    setSidebarOpen(false);
+    setSearchOpen(false);
+    setQuery("");
+  };
 
-        {/* SEARCH */}
+  return (
+    <div className="min-h-screen bg-slate-900 text-white flex flex-col md:flex-row">
+      <div className="md:hidden sticky top-0 z-50 bg-slate-900 border-b border-gray-700">
+        <header className="flex items-center justify-between px-4 py-3">
+          <h1 className="font-bold text-lg">Docs</h1>
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                setSearchOpen((v) => !v);
+                setSidebarOpen(false);
+              }}
+              className="text-xl"
+              aria-label="Search"
+            >
+              🔍
+            </button>
+
+            <button
+              onClick={() => {
+                setSidebarOpen(true);
+                setSearchOpen(false);
+              }}
+              className="text-xl"
+              aria-label="Menu"
+            >
+              ☰
+            </button>
+          </div>
+        </header>
+
+        {searchOpen && (
+          <div className="border-t border-gray-700">
+            <div className="px-4 py-3">
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search docs..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full px-3 py-2 text-sm bg-gray-800 rounded"
+              />
+            </div>
+
+            {query && (
+              <div className="px-4 pb-3 space-y-2 max-h-64 overflow-y-auto">
+                {results.length === 0 && (
+                  <p className="text-sm text-gray-400">No results</p>
+                )}
+
+                {results.map((doc) => (
+                  <Link
+                    key={doc.heading}
+                    to={`${doc.path}#${slugify(doc.heading)}`}
+                    onClick={closeAll}
+                    className="block p-2 rounded bg-gray-800 hover:bg-gray-700"
+                  >
+                    {doc.heading}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {sidebarOpen && (
+        <div
+          onClick={closeAll}
+          className="fixed inset-0 bg-black/60 z-40 md:hidden"
+        />
+      )}
+
+      <aside
+        className={`
+          fixed z-50 top-0 left-0 h-full w-64 bg-slate-900 border-r border-gray-700 p-5
+          transform transition-transform duration-200
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          md:static md:translate-x-0 md:h-screen
+        `}
+      >
+        <h2 className="text-xl font-bold mb-4 hidden md:block">Docs</h2>
+
         <input
           type="text"
           placeholder="Search docs..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full mb-4 px-3 py-2 text-sm bg-gray-800 rounded"
+          className="hidden md:block w-full mb-4 px-3 py-2 text-sm bg-gray-800 rounded"
         />
 
-        {/* SEARCH MODE */}
         {query ? (
           <div className="space-y-2">
             {results.length === 0 && (
@@ -37,7 +120,7 @@ export default function DocsLayout() {
               <Link
                 key={doc.heading}
                 to={`${doc.path}#${slugify(doc.heading)}`}
-                onClick={() => setQuery("")}
+                onClick={closeAll}
                 className="block p-2 rounded bg-gray-800 hover:bg-gray-700"
               >
                 {doc.heading}
@@ -45,7 +128,6 @@ export default function DocsLayout() {
             ))}
           </div>
         ) : (
-          /* NORMAL SIDEBAR */
           sections.map((section) => {
             const isOpen = openSection === section.title;
 
@@ -60,11 +142,7 @@ export default function DocsLayout() {
                              text-gray-300 hover:text-white"
                 >
                   {section.title}
-
-                  {/* ✅ CLEAR TOGGLE ICON */}
-                  <span className="ml-2 text-xs">
-                    {isOpen ? "^" : ">"}
-                  </span>
+                  <span className="text-xs">{isOpen ? "^" : ">"}</span>
                 </button>
 
                 {isOpen && (
@@ -73,6 +151,7 @@ export default function DocsLayout() {
                       <li key={link.path}>
                         <NavLink
                           to={link.path}
+                          onClick={closeAll}
                           className={({ isActive }) =>
                             `block px-3 py-1 rounded text-sm ${
                               isActive
@@ -93,8 +172,8 @@ export default function DocsLayout() {
         )}
       </aside>
 
-      <main className="flex-1 p-8 overflow-y-auto h-screen">
-        <ScrollToHash/>
+      <main className="flex-1 p-6 md:p-8 overflow-y-auto md:h-screen">
+        <ScrollToHash />
         <Outlet />
       </main>
     </div>
