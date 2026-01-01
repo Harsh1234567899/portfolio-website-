@@ -5,6 +5,8 @@ import Skills from './components/Skills';
 import Experience from './components/Experience';
 import About from './components/About';
 import Projects from './components/Projects';
+import { Link } from 'react-router-dom';
+import DocsLayout from './code/DocsLayout';
 
 const downloadResume = () => {
   fetch('/Harsh_Pankhaniya.pdf')
@@ -117,8 +119,8 @@ function App() {
       <Contact />
 
       {/* Footer */}
-      <footer className="bg-blue-600 text-white p-4 text-center mt-8">
-        &copy; {new Date().getFullYear()} {personalInfo.name} | MCA Portfolio
+      <footer className="bg-blue-600 text-white p-4 text-center mt-8">        
+        <Link to='/code'>&copy; {new Date().getFullYear()} {personalInfo.name} | MCA Portfolio</Link>
       </footer>
     </div>
   );

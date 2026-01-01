@@ -1,4 +1,4 @@
-import App from "../App"
+import App from "../App.jsx"
 import DocsLayout from "../code/DocsLayout.jsx"
 import Git from "../code/git/Git.jsx"
 import Basics from "../code/js/Basics.jsx"
@@ -9,7 +9,7 @@ import Loops from "../code/js/Loops.jsx"
 import Events from '../code/js/Events.jsx'
 import Api from "../code/js/Api.jsx"
 import OOPS from "../code/js/OOPS.jsx"
-const paths = [
+const Paths = [
     {
     path: '/',
     element: <App/>,
@@ -62,4 +62,4 @@ const paths = [
     ]
   }
 ]
-export default paths
+export default Paths

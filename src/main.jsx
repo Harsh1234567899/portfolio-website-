@@ -12,10 +12,10 @@ import "prismjs/components/prism-markup";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import "prismjs/plugins/line-numbers/prism-line-numbers.js";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css"
-import  paths from './paths/paths.jsx'
+import  Paths from './paths/Paths.jsx'
 
 
-const router = createBrowserRouter(paths)
+const router = createBrowserRouter(Paths)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
