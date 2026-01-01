@@ -22,8 +22,8 @@ export default function DocsLayout() {
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col md:flex-row">
       <div className="md:hidden sticky top-0 z-50 bg-slate-900 border-b border-gray-700">
-        <header className="flex items-center justify-between px-4 py-3">
-          <h1 className="font-bold text-lg">Docs</h1>
+        <header className="flex items-center justify-between px-4 py-7">
+          <h1 className="font-bold text-xl">Docs</h1>
 
           <div className="flex gap-3">
             <button
@@ -31,7 +31,7 @@ export default function DocsLayout() {
                 setSearchOpen((v) => !v);
                 setSidebarOpen(false);
               }}
-              className="text-xl"
+              className="text-3xl"
               aria-label="Search"
             >
               🔍
@@ -42,7 +42,7 @@ export default function DocsLayout() {
                 setSidebarOpen(true);
                 setSearchOpen(false);
               }}
-              className="text-xl"
+              className="text-3xl"
               aria-label="Menu"
             >
               ☰
