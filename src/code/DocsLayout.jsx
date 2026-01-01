@@ -22,7 +22,7 @@ export default function DocsLayout() {
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col md:flex-row">
       <div className="md:hidden sticky top-0 z-50 bg-slate-900 border-b border-gray-700">
-        <header className="flex items-center justify-between px-4 py-7">
+        <header className="flex items-center justify-between px-4 py-6">
           <h1 className="font-bold text-xl">Docs</h1>
 
           <div className="flex gap-3">
