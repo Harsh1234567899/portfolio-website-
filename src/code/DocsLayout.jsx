@@ -31,7 +31,7 @@ export default function DocsLayout() {
                 setSearchOpen((v) => !v);
                 setSidebarOpen(false);
               }}
-              className="text-3xl"
+              className="text-2xl"
               aria-label="Search"
             >
               🔍
@@ -42,7 +42,7 @@ export default function DocsLayout() {
                 setSidebarOpen(true);
                 setSearchOpen(false);
               }}
-              className="text-3xl"
+              className="text-2xl"
               aria-label="Menu"
             >
               ☰
