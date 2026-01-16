@@ -13,10 +13,9 @@ export const sections = [
     ],
   },
   {
-    title: "React",
+    title: "Backend",
     links: [
-      { label: "Hooks", path: "/code/react/hooks" },
-      { label: "Components", path: "/code/react/components" },
+      { label: "backend", path: "/code/backend/backend" },
     ],
   },
   {

@@ -9,6 +9,7 @@ import Loops from "../code/js/Loops.jsx"
 import Events from '../code/js/Events.jsx'
 import Api from "../code/js/Api.jsx"
 import OOPS from "../code/js/OOPS.jsx"
+import Backend from "../code/backend/Backend.jsx"
 const Paths = [
     {
     path: '/',
@@ -56,9 +57,18 @@ const Paths = [
         ]
       },
       {
+        path: 'backend',
+        children: [
+          {
+            path: 'backend',
+            element: <Backend/>
+          }
+        ]
+      },
+      {
         path: 'git',
         element: <Git/>
-      }
+      },
     ]
   }
 ]

@@ -2121,6 +2121,877 @@ git tag -a <tag name> -m "release 1.0"
         path: "/code/git",
       },
     ]
+  },
+  backend: {
+    backend: [
+        {            
+        id: "backend-intro",
+        section: "backend",
+        page: "backend",
+        heading: "backend setup",
+        text: "intro",
+        children: `https://github.com/hiteshchoudhary/chai-backend/tree/main
+
+1) 
+/: - home route
+/login - login setup
+
+
+2) requests -
+GET
+POST
+
+3) 
+npm init
+package name: (backend-with-javascript) chaiBackend
+version: (1.0.0) 
+description: a basic app
+entry point: (index.js) 
+test command: 
+git repository: gh repo clone Harsh1234567899/backend-with-javaScript
+keywords: node chai
+author: harsh
+license: (ISC) 
+
+ls - viwe files
+
+inside package.json in scripts : add new run cammand ("start": "node index.js")
+
+4) npm install express
+5)
+dot env - pakage use when want to run in different port
+npm i dotenv
+create new file  .env where we store database url port number etc.
+
+6)
+when want to run diffrent file as main file change name of file in package.json
+- give proper path to run 
+- "type": "commonjs", to module so express is find the file and give property 
+    when use commonjs in file we use require and in module use module keyword
+
+7) npm i axios 
+- use for connect backend and fronted using url 
+
+8) npm i mongoose 
+- use for mongodb database
+- moon modeler/ eraser.io -- for data base structure 
+
+9) cors npm 
+cors is provide security to our website for unknown url or path of url
+cors is not allowing other url to enter in our website url expect we whitlist tham 
+
+10)  npm i mongoose-aggregate-paginate-v2
+- mongodb package to manage complex query
+
+11) npm i bcrypt
+- bcrypt is use to encrypt/decrypt the password
+
+12) npm i jsonwebtoken (json web token / jwt)
+- jwt.io
+
+13) import fs from "fs"
+- node file manager 
+
+14) npm i multer cloudinary
+-cloudinary image and file storage
+- multer frist store in local storage or server than after some time send to cloudinary
+
+15) mongodb aggregation piplines
+- link data like in sql one table addresh share with other table
+
+16) Socket.IO ,grapgql , sql db
+
+17 ) "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev"
+    --- concurrently is help to run backend and fronted with one command`,
+        path: "/code/backend/backend",
+        },
+        {            
+        id: "cloudinary-setup",
+        section: "backend",
+        page: "backend",
+        heading: "cloudinary",
+        text: "cloudinary setup",
+        children: `import {v2 as cloudinary} from "cloudinary";
+import fs from "fs"
+import { extractPublicId } from 'cloudinary-build-url';
+import { ApiError } from "./ApiError.js";
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API,
+    api_secret: process.env.CLOUDINARY_SECRET
+})
+// console.log(process.env.CLOUDINARY_NAME,process.env.CLOUDINARY_API,process.env.CLOUDINARY_SECRET);
+
+
+const uploadOnCloudinary = async (localFilePath , folder = "") => {
+    try {
+        if (!localFilePath) return null // check file path is there or not
+        // upload the file on cloudinary
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            resource_type: "auto",
+            folder: folder // use to give aa folder path
+        })
+        // console.log("cloudinary response",response);
+        
+        //file upload success
+        // console.log("fill upload in cloudinary", response.url); // give a url of the file uplload 
+        fs.unlinkSync(localFilePath);
+        return response
+        
+    } catch (error) {
+        fs.unlinkSync(localFilePath) // remove the locally saved temporary file as the upload operation got failed
+            if (fs.existsSync(localFilePath)) {
+                fs.unlinkSync(localFilePath);
+        }
+        return null
+
+    }
+}
+
+const deleteOnCloudinary = async (imageURL) => {
+    try {
+        if (!imageURL) {
+            throw new ApiError(404, "Image Invalid")
+        }
+        //delete the file on cloudinary
+        const publicId = extractPublicId(imageURL);
+        const resourceType = imageURL.includes("/video/")
+            ? "video"
+            : "image";
+        
+        const response = await cloudinary.uploader.destroy(publicId ,{
+            resource_type: resourceType
+        });
+        if(response.result != 'ok'){
+            throw new ApiError(404, "Old Image Deletion Failed from Cloudinary")
+        }
+
+        // file has been deleted
+        return 1;
+
+    } catch (error) {
+        throw new ApiError(400,"cloudinary delete catch block");
+    }
+}
+
+
+
+const replaceOnCloudinary = async (localFilePath, oldFileUrl, folder = "") => {
+
+    if (!(localFilePath && oldFileUrl)) {
+        throw new ApiError(401,"old and new file path is requierd")
+    }
+    const newFile = await uploadOnCloudinary(localFilePath, folder);
+    if (!newFile?.url) { 
+        throw new ApiError(401,"new file is not upload")
+    };
+
+    const deletefile =  await deleteOnCloudinary(oldFileUrl);
+    
+    return newFile;
+};
+
+export {uploadOnCloudinary  ,replaceOnCloudinary ,deleteOnCloudinary}`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "jwt",
+        section: "backend",
+        page: "backend",
+        heading: "jwt",
+        text: "jwt setup",
+        children: `userSchema.methods.generateAccessToken = function(){
+    return jwt.sign({
+        _id: this._id,
+        email: this.email,
+        username: this.username,
+        fullname: this.fullname
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+    }
+)
+}
+userSchema.methods.generateRefreshToken = function(){
+    return jwt.sign({
+        _id: this._id,
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+    }
+)
+} // in usermodel
+ //in user controller
+ const generateAccessTokenAndRefreshToken = async (userId) => {
+    try {
+        const giveUserToken =  await User.findById(userId) 
+        const accessToken = giveUserToken.generateAccessToken()
+        const refreshToken = giveUserToken.generateRefreshToken()
+
+        giveUserToken.refreshToken = refreshToken // give to db 
+        await giveUserToken.save({validateBeforeSave: false}) // save token // if validation is not false than need to again verfy the user
+        return {accessToken , refreshToken}
+    } catch (error) {
+        throw new ApiError(500,"somthing went wrong while generate tokens")
+    }
+}
+`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "api-response",
+        section: "backend",
+        page: "backend",
+        heading: "Api-response",
+        text: "api response",
+        children: `class ApiResponse {
+    constructor(statusCode , data , message = "success"){
+        this.statusCode = statusCode
+        this.data = data
+        this.message = message
+        this.success = statusCode < 400
+    }
+}
+export {ApiResponse}`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "api-error",
+        section: "backend",
+        page: "backend",
+        heading: "Api-error",
+        text: "utils api error",
+        children: `class ApiError extends Error {
+    constructor(
+        statusCode,
+        message= "Something went wrong",
+        errors = [],
+        stack = ""
+    ){
+        super(message)
+        this.statusCode = statusCode
+        this.data = null
+        this.message = message
+        this.success = false;
+        this.errors = errors
+
+        if (stack) {
+            this.stack = stack
+        } else{
+            Error.captureStackTrace(this, this.constructor)
+        }
+
+    }
+}
+
+export {ApiError}`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "asynce -handeler",
+        section: "backend",
+        page: "backend",
+        heading: "asynce handler",
+        text: "utils asynce handler",
+        children: `const asyncHandler = (requestHandler) => {
+    return (req, res, next) => {
+        Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err))
+    }
+}
+
+
+export { asyncHandler }
+
+
+
+
+// const asyncHandler = () => {}
+// const asyncHandler = (func) => () => {}
+// const asyncHandler = (func) => async () => {}
+
+
+// const asyncHandler = (fn) => async (err, req, res, next) => {
+//     try {
+//         await fn(req, res, next)
+//     } catch (error) {
+//         res.status(err.code || 500).json({
+//             success: false,
+//             message: err.message
+//         })
+//     }
+// }`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "user controller",
+        section: "backend",
+        page: "backend",
+        heading: "user controller",
+        text: "user controller example",
+        children: `import {asyncHandler} from "../utils/asyncHandler.js"
+import {ApiError} from "../utils/ApiError.js"
+import {User} from "../models/user.model.js"
+import {replaceOnCloudinary, uploadOnCloudinary} from "../utils/cloudinary.js"
+import {ApiResponse} from "../utils/ApiResponse.js"
+import jwt from "jsonwebtoken"
+import mongoose from "mongoose"
+
+const generateAccessTokenAndRefreshToken = async (userId) => {
+    try {
+        const giveUserToken =  await User.findById(userId) 
+        const accessToken = giveUserToken.generateAccessToken()
+        const refreshToken = giveUserToken.generateRefreshToken()
+
+        giveUserToken.refreshToken = refreshToken // give to db 
+        await giveUserToken.save({validateBeforeSave: false}) // save token // if validation is not false than need to again verfy the user
+        return {accessToken , refreshToken}
+    } catch (error) {
+        throw new ApiError(500,"somthing went wrong while generate tokens")
+    }
+}
+
+const registerUser = asyncHandler( async (req,res) => {
+    // res.status(200).json({
+    //     message: "ok"
+    // })
+
+    // get user details from frontend
+    // validation - not empty
+    // check if user already exists : username , email
+    // check for images , check for avtar
+    // upload to cloudinary , avtar
+    // create user object - create entry in db
+    // remove password and refersh token from response
+    // check for user creation
+    // response return
+
+    const {fullname , email , username , password  }=req.body
+    // console.log( email );
+
+    // if (fullname === "") {
+    //     throw new ApiError(400,"fullname is required")
+    // }
+    if ([fullname , email , username , password].some((field)=>  field?.trim() === "") ){ // check fileds are empty or not
+        throw new ApiError(400, "All fiels required");
+    }
+
+    const existedUser = await User.findOne({ // check if user is already in databse or not 
+        $or: [ { username } , { email } ]
+    })
+    if (existedUser) {
+        throw new ApiError(409,"user already exist");
+    }
+
+    const avatarLocalPath = req.files?.avatar[0]?.path; // check the local path
+    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+    if (!avatarLocalPath) {
+        throw new ApiError(400,"avatar file is required 1")
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath, "chai-bakend-youtubeclone-code/avatars") 
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath, "chai-bakend-youtubeclone-code/coverimage") // folder path to upload in cloudinary
+
+    if (!avatar) {
+        throw new ApiError(400, "avatar file is required 2") // check avtar is upload or not
+    }
+
+    const user = await User.create({ // store user in  db
+        fullname,
+        avatar: avatar.url, // save only url
+        coverImage: coverImage?.url || "", // check cover image is there or not or in empty case store nothing
+        email,
+        password,
+        username: username.toLowerCase()
+    })
+
+    const createdUser = await User.findById(user._id).select("-password -refershToken") // remove password and refreshtoken filed in response
+
+    if (!createdUser) {
+        throw new ApiError(500,"somthing went wrong while register user")
+    }
+
+    return res.status(201).json( // send response to db
+        new ApiResponse(200,createdUser ,"user registered ...")
+    )
+
+})
+
+const loginUser = asyncHandler(async (req,res) => {
+    // get user ditails from db
+    //validation 
+    // check passwrod and username correct or not
+    // password decreypt and again encrypt after compare
+    // compare from bd data
+    // login
+
+    //req body for data
+    // username or email
+    // find the user
+    // passwrod check
+    //access and refresh token
+    // send cookie
+
+    const {email , username , password} = req.body
+    // if (!username && !email) {
+    //     throw new ApiError(400,"username or email is required")
+    // }
+    
+
+    if (!(username || email)) {
+        throw new ApiError(400,"username or email is required")
+    }
+
+    const user = await User.findOne({
+        $or : [{username},{email}]
+    })
+
+    if (!user) {
+        throw new ApiError(404,"user not found")
+    }
+
+    const isPasswordValid = await user.isPassword(password) // check password is same or not
+
+    if (!isPasswordValid) {
+        throw new ApiError(401,"password incorect")
+    }
+
+    const {accessToken , refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
+
+    const loggedInUser = await User.findById(user._id).select("-password -refershToken")
+
+    const options = { // help to not modify the cookies 
+        httpOnly: true,
+        secure: true
+    }
+    return res.status(200).cookie("accessToken", accessToken ,options).cookie("refreshToken",refreshToken,options)
+.json( new ApiResponse(200,{user: loggedInUser , accessToken , refreshToken},"user logged In done"))
+})
+
+const loggedOutUserWhenTokenExpire = asyncHandler(async (req,res) => {
+    await User.findByIdAndUpdate( // update the token
+        req.user._id,
+        {
+            // $set: {
+            //     refreshToken: undefined
+            // }
+            $unset:{
+                refreshToken: 1
+            }
+        },
+        { // give new value of token
+            new: true
+        }
+    )
+    const options = { // not alloed to modify the cookies
+        httpOnly: true,
+        secure: true
+    }
+    return res.status(200).clearCookie("accessToken",options).clearCookie("refreshToken",options).json(new ApiResponse(200,{},"user logged out"))
+})
+
+const refershAccessToken = asyncHandler(async (req,res) => {
+    const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken
+
+    if (!incomingRefreshToken) {
+        throw new ApiError(401,"unauthorized request")
+    }
+
+    try {
+        const decodedToken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET) // check from db to verify and give new access token
+    
+        const user = await User.findById(decodedToken?._id)
+    
+        if (!user) {
+            throw new ApiError(401,"invalid referes token")
+        }
+    
+        if (incomingRefreshToken !== user?.refreshToken) {
+            throw new ApiError(401,"refresh token is expired")
+        }
+    
+        const options = { // not alloed to modify the cookies
+            httpOnly: true,
+            secure: true
+        }
+    
+        const {accessToken,newRefreshToken} = await generateAccessTokenAndRefreshToken(user._id)
+    
+        return res.status(200).cookie("accessToken" , accessToken ,options).cookie("refreshToken",newRefreshToken , options).json(new ApiResponse(200,{accessToken,refreshToken: newRefreshToken},"access token refreshed"))
+    } catch (error) {
+        throw new ApiError(401,error?.message || "invalid refresh token")
+    }
+})
+
+const changeCurrentPassword = asyncHandler(async (req,res) => {
+    const {oldPassword , newPassword , confiremPassword} = req.body
+    const user = User.findById(req.user?._id) // get this from user auth middelwear
+    const isPasswordCorrect = await user.isPassword(oldPassword) // check old password and new password is same or not
+
+    if (!isPasswordCorrect) {
+        throw new ApiError(400,"old password is wrong")
+    }
+    if (!(newPassword === confiremPassword)) {
+        throw new ApiError(400,"new password and confirem password is not matched")
+    }
+    user.password = newPassword
+    await user.save({validateBeforeSave: false})
+
+    return res.status(200).json(new ApiResponse(200),{},"password changed")
+})
+
+const getCurrentUser = asyncHandler(async (req,res) => {
+    return res.status(200).json(new ApiResponse(200,req.user,"current user fatched successfully"))
+})
+
+const updateAccountDetails = asyncHandler (async (req,res) => {
+    const {fullname ,email}=req.body
+
+    if (!fullname || !email) {
+        throw new ApiError(400,"all fileds are required")
+    }
+
+    const user =await User.findByIdAndUpdate(req.user?._id , {$set: {fullname: fullname,email: email}},{new: true}).select("-password -refreshToken")
+
+    return res.status(200).json(new ApiResponse(200 ,user,"account updated"))
+})
+
+const updateAvatar = asyncHandler(async (req,res) => {
+    const avatarLocalPath = req.file?.path // get a path of  avatar
+    const avatardbPath = req.user?.avatar
+
+    if (!avatarLocalPath) {
+        throw new ApiError(400,"avatar file is missing")
+    }
+
+    const avatar = await replaceOnCloudinary(avatarLocalPath,avatardbPath ,"chai-bakend-youtubeclone-code/avatars")
+
+    if (!avatar.url) {
+         throw new ApiError(400,"error while uploading on avatar")
+    }
+
+    const user = await User.findByIdAndUpdate(req.user?._id, { $set:{avatar: avatar.url}},{new:true}).select("-password -refreshToken")
+
+    return res.status(200).json(new ApiResponse(200,user,"avatar updated"))
+})
+
+const updateCoverImage = asyncHandler(async (req,res) => {
+    const coverImageLocalPath = req.file?.path // get a path of cover image
+    const coverImagedbpath = req.user.coverImage
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400,"cover image file is missing")
+    }
+
+    const coverImage = await replaceOnCloudinary(coverImageLocalPath,coverImagedbpath ,"chai-bakend-youtubeclone-code/coverImage")
+
+    if (!coverImage.url) {
+         throw new ApiError(400,"error while uploading on cover image")
+    }
+
+    const user = await User.findByIdAndUpdate(req.user?._id, { $set:{coverImage: coverImage.url}},{new:true}).select("-password -refreshToken")
+
+    return res.status(200).json(new ApiResponse(200,user,"cover image updated"))
+})
+
+const getUserChannelProfile = asyncHandler(async (req,res) => {
+
+    const {username} = req.params // get user from url
+
+    if (!username?.trim()) {
+        throw new ApiError(400,"username is missing")        
+    }
+
+    // User.find({username})
+    const channel = await User.aggregate([ //aggregation pipline
+        {
+            $match: {
+                username: username?.toLowerCase()
+            }
+        },
+        {
+            $lookup: { // this for count subscribers
+                from: "subscription",
+                localField: "_id",
+                foreignField: "channel",
+                as: "subscribers"
+            }
+        },
+        {
+            $lookup: { // this for count how many user have subscribed
+                from: "subscription",
+                localField: "_id",
+                foreignField: "subscriber",
+                as: "subscribedTo"
+            }
+        },
+        {
+            $addFields: { // add filds subscriber count , subscribed or not 
+                subscribersCount: {
+                    $size: "$subscribers"
+                },
+                channelsSubscribedToCount: {
+                    $size: "$subscribedTo"
+                },
+                isSubscribed: {
+                    $cond: { // cond for condition
+                        if: {$in: [req.user?._id , "$subscribers.subscriber"]},
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        },
+        {
+            $project: { // send this filds to frontend 
+                fullname: 1,
+                username: 1,
+                subscribersCount: 1,
+                channelsSubscribedToCount: 1,
+                isSubscribed: 1,
+                avatar: 1,
+                coverImage: 1,
+                email: 1
+            }
+        }
+    ])
+    console.log(channel);
+    if (!channel?.length) {
+        throw new ApiError(404,"channel not exists")
+    }
+
+    return res.status(200).json(new ApiResponse(200,channel[0],"user channel fatched"))
+    
+})
+
+const getUserWatchHistory = asyncHandler(async (req,res) => {
+    const user = await User.aggregate([
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup: {
+                from: "videos", // here not use model export name but name that mongodb store
+                localField: "watchHistory",
+                foreignField: "_id",
+                as: "watchHistory",
+                pipeline: [ // pipline inside pipline of video owner
+                    {
+                        $lookup:{
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "owner",
+                            pipeline: [
+                                {
+                                    $project: {
+                                        fullname: 1,
+                                        username: 1,
+                                        avatar: 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $addFields: {
+                            owner: {
+                                $first: "$owner"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+
+    ])
+    if (!user?.length) {
+        throw new ApiError(404,"no watched videos")
+    }
+
+    return res.status(200).json(new ApiResponse(200,user[0].watchHistory,"watch history fetched"))
+})
+export {registerUser,
+     loginUser, 
+     loggedOutUserWhenTokenExpire,
+     refershAccessToken, 
+     changeCurrentPassword,
+     getCurrentUser,
+     updateAccountDetails, 
+     updateAvatar,
+     updateCoverImage,
+     getUserChannelProfile,
+     getUserWatchHistory
+} `,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "model",
+        section: "backend",
+        page: "backend",
+        heading: "model",
+        text: "model example",
+        children: `
+import mongoose , {Schema}  from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+
+
+const userSchema = new Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+        index: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+    },
+    fullname: {
+        type: String,
+        required: true,
+        trim: true,
+        index: true
+    },
+    avatar: {
+        type: String, // cloudinary url
+        required: true,
+    },
+    coverImage: {
+        type: String, // cloudinary url
+
+    },
+    watchHistory: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Video"
+        }
+    ],
+    password: {
+        type: String,
+        required: [true, "password is require"]
+    },
+    refershToken: {
+        type: String,
+    }
+},{timestamps: true})
+
+userSchema.pre("save", async function(next) { // password encrypt before password save
+    if(!this.isModified("password")) return next();
+
+    this.password = await bcrypt.hash(this.password, 10)
+    next()
+})
+
+userSchema.methods.isPassword =async function (password) { // compare password 
+    return await bcrypt.compare(password , this.password) // return only true or false password is equal or not
+}
+
+userSchema.methods.generateAccessToken = function(){
+    return jwt.sign({
+        _id: this._id,
+        email: this.email,
+        username: this.username,
+        fullname: this.fullname
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+    }
+)
+}
+userSchema.methods.generateRefreshToken = function(){
+    return jwt.sign({
+        _id: this._id,
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+    }
+)
+}
+
+export  const User = mongoose.model("User",userSchema)`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "db-connect",
+        section: "backend",
+        page: "backend",
+        heading: "mongodb databse connect",
+        text: "mongodb database",
+        children: `import mongoose from "mongoose";
+import { DB_NAME } from "../constants.js";
+
+const connectDB = async () => {
+    try {
+        const connectionInstance =  await mongoose.connect(\`\${process.env.MONGODB_URI}/\${DB_NAME}\`)
+        console.log(\`\n mongo db connected!!!! DB HOST : \${connectionInstance.connection.host}\`);
+        
+    } catch (error) {
+        console.log("mongo db connection error", error);
+        process.exit(1)
+        
+    }
+}
+export default connectDB`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "routes",
+        section: "backend",
+        page: "backend",
+        heading: "routes",
+        text: "routes example",
+        children: `import { Router } from "express";
+import { loggedOutUserWhenTokenExpire, loginUser, registerUser, refershAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateAvatar, updateCoverImage, getUserChannelProfile, getUserWatchHistory } from "../controllers/user.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+
+const router = Router()
+
+router.route("/register").post( upload.fields([{name: "avatar", maxCount: 1},{name: "coverImage", maxCount: 1}]), registerUser)
+
+router.route("/login").post(loginUser)
+
+// secure router middlewear
+router.route("/logout").post(verifyJWT, loggedOutUserWhenTokenExpire)
+router.route("/refresh-token").post(refershAccessToken)
+router.route("/change-password").post(verifyJWT,changeCurrentPassword)
+router.route("/current-user").get(verifyJWT,getCurrentUser)
+router.route("/update-account").patch(verifyJWT,updateAccountDetails)
+router.route("/update-avatar").patch(verifyJWT,upload.single("avatar"), updateAvatar)
+router.route("/update-coverimage").patch(verifyJWT,upload.single("coverImage"), updateCoverImage)
+router.route("/c/:username").get(verifyJWT,getUserChannelProfile)
+router.route("/watch-history").get(verifyJWT ,getUserWatchHistory)
+
+export default router`,
+        path: "/code/backend/backend",
+        },
+        {
+        id: "jwt",
+        section: "backend",
+        page: "backend",
+        heading: "jwt",
+        text: "jwt setup",
+        children: ``,
+        path: "/code/backend/backend",
+        },
+    ]
   }
 
 };
