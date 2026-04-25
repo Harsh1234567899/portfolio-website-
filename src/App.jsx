@@ -5,8 +5,8 @@ import Skills from './components/Skills';
 import Experience from './components/Experience';
 import About from './components/About';
 import Projects from './components/Projects';
-import { Link } from 'react-router-dom';
 import DocsLayout from './code/DocsLayout';
+import theme from './theme';
 
 const downloadResume = () => {
   fetch('/Harsh_Pankhaniya.pdf')
@@ -28,99 +28,108 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="font-sans text-white bg-slate-900">
-      {/* Navbar */}
-      <header className=" bg-slate-900 shadow-md p-4 flex items-center justify-between md:px-12  ">
-        <h1 className="text-xl font-bold text-blue-500">{personalInfo.name}</h1>
-        <nav className="hidden md:flex flex-1 justify-center space-x-8 text-white font-medium">
-          <a href="#home">Home</a>
-          <a href="#projects">Projects</a>
-          <a href="#Experience">Experience</a>
-          <a href="#skills">Skills</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+    <div className={`font-sans ${theme.textBody} ${theme.bgPrimary}`}>
+
+      {/* ── Navbar (30% gray-600) ─────────────────────────── */}
+      <header className={`${theme.navBg} shadow-lg p-4 flex items-center justify-between md:px-12 sticky top-0 z-50`}>
+        <h1 className={`text-xl font-bold ${theme.brandTextNav}`}>{personalInfo.name}</h1>
+
+        <nav className={`hidden md:flex flex-1 justify-center space-x-8 ${theme.navText} font-medium`}>
+          {['home', 'projects', 'Experience', 'skills', 'about', 'contact'].map(s => (
+            <a key={s} href={`#${s}`} className={`${theme.navHover} transition-colors duration-200`}>
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </a>
+          ))}
         </nav>
+
         <div className="hidden md:block">
-          <button
-            onClick={downloadResume}
-            className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
-          >
+          <button onClick={downloadResume} className={`${theme.btnPrimary} px-5 py-2 rounded-xl shadow`}>
             Resume Download
           </button>
         </div>
+
         <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)} className="text-2xl text-blue-600">☰</button>
+          <button onClick={() => setMenuOpen(!menuOpen)} className={`text-2xl ${theme.textOnSecondary}`}>
+            ☰
+          </button>
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* ── Mobile Menu ───────────────────────────────────── */}
       {menuOpen && (
-        <nav className="flex flex-col bg-white shadow-md p-4 md:hidden space-y-2 text-gray-700">
-          {['home', 'about', 'skills', 'projects', 'contact'].map(section => (
-            <a key={section} href={`#${section}`} onClick={() => setMenuOpen(false)}>
-              {section.charAt(0).toUpperCase() + section.slice(1)}
+        <nav className={`flex flex-col ${theme.navBg} shadow-md p-4 md:hidden space-y-3 ${theme.navText}`}>
+          {['home', 'about', 'skills', 'projects', 'Experience', 'contact'].map(s => (
+            <a
+              key={s}
+              href={`#${s}`}
+              onClick={() => setMenuOpen(false)}
+              className={`${theme.navHover} transition-colors duration-200`}
+            >
+              {s.charAt(0).toUpperCase() + s.slice(1)}
             </a>
           ))}
           <button
-            onClick={() => {
-              downloadResume();
-              setMenuOpen(false);
-            }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
+            onClick={() => { downloadResume(); setMenuOpen(false); }}
+            className={`${theme.btnPrimary} px-4 py-2 rounded-xl mt-2`}
           >
             Resume Download
           </button>
         </nav>
       )}
 
-      {/* Home Section */}
-      <section id="home" className=" bg-slate-900 px-6 md:px-20 py-20 flex flex-col-reverse md:flex-row items-center justify-between">
+      {/* ── Home (60% white) ──────────────────────────────── */}
+      <section id="home" className={`${theme.sectionWhite} px-6 md:px-20 py-24 flex flex-col-reverse md:flex-row items-center justify-between`}>
         <div className="max-w-xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">
-            Hi, I'm <span className="text-white">{personalInfo.name}!</span>
+          <h2 className={`text-3xl md:text-4xl font-bold mb-2 ${theme.textHeading}`}>
+            Hi, I'm <span className="font-extrabold">{ personalInfo.name}!</span>
           </h2>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-purple-700 mb-4">Web Devloper</h1>
-          <p className="text-white mb-6">{personalInfo.about}</p>
+          <h1 className={`text-4xl md:text-5xl font-extrabold ${theme.textAccent} mb-4`}>Web Developer</h1>
+          <p className={`${theme.textBody} mb-6 leading-relaxed`}>{personalInfo.about}</p>
           <div className="flex flex-wrap gap-4">
-            <a href="#projects" className="px-5 py-2 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition">
+            <a href="#projects" className={`px-6 py-2 rounded-xl shadow ${theme.btnPrimary}`}>
               PROJECTS
             </a>
-            <a href="#contact" className="px-5 py-2 border-2 border-purple-700 text-purple-700 rounded-xl hover:bg-purple-700 hover:text-white transition">
+            <a href="#contact" className={`px-6 py-2 rounded-xl ${theme.btnOutline}`}>
               LET'S TALK
             </a>
           </div>
         </div>
         <div className="mb-8 md:mb-0">
-          <img src="/photo1.jpg" alt="Profile" className="w-64 h-64 object-cover rounded-full shadow-lg border-4 border-purple-300" />
+          <img
+            src="/photo1.jpg"
+            alt="Profile"
+            className={`w-64 h-64 object-cover rounded-full shadow-xl ${theme.imgBorder}`}
+          />
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects">
+      {/* ── Projects (60% white / light gray) ────────────── */}
+      <section id="projects" className={theme.sectionWhite}>
         <Projects />
       </section>
 
-      {/* Experience Section */}
-      <section id="Experience" className="bg-slate-900 py-12 px-6 md:px-20">
+      {/* ── Experience (30% gray-600) ─────────────────────── */}
+      <section id="Experience" className={`${theme.sectionGray} py-12 px-6 md:px-20`}>
         <Experience />
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" className=" py-12 px-6 md:px-20">
+      {/* ── Skills (60% white) ────────────────────────────── */}
+      <section id="skills" className={`${theme.sectionWhite} py-12 px-6 md:px-20`}>
         <Skills />
       </section>
 
-      {/* About Section */}
-      <section id="about">
+      {/* ── About (30% gray-600) ──────────────────────────── */}
+      <section id="about" className={theme.sectionGray}>
         <About downloadResume={downloadResume} />
       </section>
 
-      {/* Contact Section */}
+      {/* ── Contact (60% white) ───────────────────────────── */}
       <Contact />
 
-      {/* Footer */}
-      <footer className="bg-blue-600 text-white p-4 text-center mt-8">        
-        &copy; {new Date().getFullYear()} {personalInfo.name} 
+      {/* ── Footer (30% gray-600) ─────────────────────────── */}
+      <footer className={`${theme.footerBg} ${theme.footerText} p-6 text-center text-sm`}>
+        &copy; {new Date().getFullYear()}{' '}
+        <span className="font-bold">{personalInfo.name}</span> 
       </footer>
     </div>
   );
