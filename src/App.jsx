@@ -35,7 +35,7 @@ function App() {
         <nav className="hidden md:flex flex-1 justify-center space-x-8 text-white font-medium">
           <a href="#home">Home</a>
           <a href="#projects">Projects</a>
-          {/* <a href="#Experience">Experience</a> */}
+          <a href="#Experience">Experience</a>
           <a href="#skills">Skills</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
@@ -101,9 +101,9 @@ function App() {
       </section>
 
       {/* Experience Section */}
-      {/* <section id="Experience" className="bg-white py-12 px-6 md:px-20">
+      <section id="Experience" className="bg-slate-900 py-12 px-6 md:px-20">
         <Experience />
-      </section> */}
+      </section>
 
       {/* Skills Section */}
       <section id="skills" className=" py-12 px-6 md:px-20">
@@ -120,7 +120,7 @@ function App() {
 
       {/* Footer */}
       <footer className="bg-blue-600 text-white p-4 text-center mt-8">        
-        &copy; {new Date().getFullYear()} {personalInfo.name} | MCA Portfolio
+        &copy; {new Date().getFullYear()} {personalInfo.name} 
       </footer>
     </div>
   );

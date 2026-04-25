@@ -40,17 +40,26 @@ export default function Projects() {
         {personalInfo.projects.map((project, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col cursor-pointer"
+            className="group bg-slate-800 border border-slate-700 rounded-xl shadow-md hover:shadow-2xl hover:shadow-purple-900/40 hover:border-purple-600 hover:-translate-y-2 transition-all duration-300 flex flex-col cursor-pointer overflow-hidden"
             onClick={() => openModal(project)}
           >
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-48 object-cover rounded-t-xl"
-            />
+            {/* Image with zoom + overlay on hover */}
+            <div className="relative overflow-hidden rounded-t-xl h-48">
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              {/* Dark overlay with 'View Details' label */}
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <span className="text-white text-sm font-semibold tracking-widest uppercase border border-white/60 px-4 py-2 rounded-full backdrop-blur-sm">
+                  View Details
+                </span>
+              </div>
+            </div>
 
-            <div className="bg-slate-800 p-4 flex flex-col flex-grow text-white rounded-b-xl">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="p-4 flex flex-col flex-grow text-white">
+              <h3 className="text-xl font-semibold mb-2 group-hover:text-purple-400 transition-colors duration-300">
                 {project.title}
               </h3>
               <div
