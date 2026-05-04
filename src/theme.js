@@ -13,7 +13,7 @@ const theme = {
   textHeading:     'text-gray-900',      // headings on white bg
   textBody:        'text-gray-700',      // body text on white bg
   textMuted:       'text-gray-500',      // sub-text on white bg
-  textOnSecondary: 'text-white',         // any text on gray-600 bg
+  textOnSecondary: 'text-black',         // any text on gray-600 bg
   textOnAccent:    'text-white',         // text on black bg
   textAccent:      'text-black',         // accent-colored text on white
   textSubAccent:   'text-gray-300',      // muted text on gray-600 bg
